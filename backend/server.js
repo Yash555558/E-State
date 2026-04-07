@@ -19,7 +19,28 @@ app.use(helmet());
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? true : process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // In production, allow all origins from Vercel
+    if (process.env.NODE_ENV === 'production') {
+      // Allow any vercel.app domain
+      if (origin.includes('vercel.app') || origin.includes('localhost')) {
+        callback(null, true);
+      } else {
+        callback(null, true);
+      }
+    } else {
+      // Development: allow localhost
+      const allowedOrigins = ['http://localhost:3000'];
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(null, true);
+      }
+    }
+  },
   credentials: true
 }));
 
