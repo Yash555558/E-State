@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { propertyService } from '../../services/propertyService';
 import PropertyCard from '../../components/PropertyCard';
 import SearchFilters from '../../components/SearchFilters';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
-export default function PropertiesPage() {
+function PropertiesContent() {
   const searchParams = useSearchParams();
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -107,5 +107,13 @@ export default function PropertiesPage() {
         </>
       )}
     </div>
+  );
+}
+
+export default function PropertiesPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner size="large" />}>
+      <PropertiesContent />
+    </Suspense>
   );
 }
