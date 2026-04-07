@@ -20,6 +20,8 @@ function PropertiesContent() {
   const fetchProperties = async () => {
     setLoading(true);
     try {
+      console.log('API URL:', process.env.NEXT_PUBLIC_API_URL);
+      
       const params = {
         page: searchParams.get('page') || 1,
         limit: 10
@@ -35,7 +37,9 @@ function PropertiesContent() {
         params.location = searchParams.get('location');
       }
 
+      console.log('Fetching properties with params:', params);
       const data = await propertyService.getAll(params);
+      console.log('Properties received:', data);
       setProperties(data.data);
       setPagination({
         page: data.page,
@@ -44,6 +48,8 @@ function PropertiesContent() {
       });
     } catch (error) {
       console.error('Error fetching properties:', error);
+      console.error('Error response:', error.response);
+      console.error('Error request:', error.config);
     } finally {
       setLoading(false);
     }
